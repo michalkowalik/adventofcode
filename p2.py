@@ -1,3 +1,6 @@
+#%% [markdown]
+# Day 2
+
 #%%
 from collections import Counter
 codes = []
@@ -23,7 +26,7 @@ for code in codes:
 #%%
 twos = sum([x[0] for x in letter_distributions])
 threes = sum([x[1] for x in letter_distributions])
-print("RES: {0}", twos * threes)
+print("RES: {0}".format(twos * threes))
 
 #%% [markdown]
 ## Part 2
@@ -52,4 +55,4 @@ res = ''
 for c in range(0, len(l[0])):
     if l[0][c] == l[1][c]:
         res += l[0][c]
-print(res)
+print("RES2: {0}".format(res))

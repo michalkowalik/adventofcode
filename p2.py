@@ -39,8 +39,17 @@ def code_match(c1, c2):
         differences += 1
     return True
 
-for i in range(0, len(codes)):
-    c1 = codes[i]
-    for j in range(i + 1, len(codes)):
-        if code_match(c1, codes[j]):
-            print("WE HAVE MATCH!: {0}, {1}", c1, codes[j])
+def find_matching_codes():
+    for i in range(0, len(codes)):
+        c1 = codes[i]
+        for j in range(i + 1, len(codes)):
+            if code_match(c1, codes[j]):
+                return [c1, codes[j]]
+    return []
+
+l = find_matching_codes()
+res = ''
+for c in range(0, len(l[0])):
+    if l[0][c] == l[1][c]:
+        res += l[0][c]
+print(res)

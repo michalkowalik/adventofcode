@@ -44,10 +44,6 @@ class P3:
     def solve_part_2(self):
         x = [c.id for c in self.claims if self.not_overlapping_claim(c)]
         print("P3.2: {0}".format(x[0]))
-        # for c in self.claims:
-        #     if self.not_overlapping_claim(c):
-        #         print("P3.2: {0}".format(c.id))
-        #         break
 
     def solve(self):
         self.claims = self.parse(self.puzzle_input)

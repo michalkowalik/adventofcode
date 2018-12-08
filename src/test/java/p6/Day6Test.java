@@ -11,13 +11,9 @@ class Day6Test {
     
     Day6 d = new Day6();
     
-    Point p1 = new Point(0, 0);
-    Point p2 = new Point(1, 1);
+    BasePoint p1 = new BasePoint(0, 0);
+    BasePoint p2 = new BasePoint(1, 1);
     
     assertEquals(2, d.manhattanDistance(p1, p2));
-  }
-  
-  @Test
-  void isFiniteArea() {
   }
 }

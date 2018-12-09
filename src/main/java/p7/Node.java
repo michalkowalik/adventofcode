@@ -22,4 +22,8 @@ public class Node {
   public void addConnection(Edge e) {
     this.connections.add(e);
   }
+  
+  public List<Edge> getConnections() {
+    return this.connections;
+  }
 }

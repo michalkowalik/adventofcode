@@ -46,7 +46,7 @@ public class P7 {
     workers.add(new Worker("W5"));
   
     
-    String res = "";
+    StringBuilder res = new StringBuilder();
     
     int currentTime = 0;
     List<String> top = findTop(g);
@@ -61,7 +61,7 @@ public class P7 {
           System.out.println(
                   "Worker " + w.getName() + " finished with " + w.getCurrentNode().getName() +
                   " at t=" + currentTime);
-          res += w.getCurrentNode().getName();
+          res.append(w.getCurrentNode().getName());
           g.removeNode(w.getCurrentNode().getName());
           w.setDone(false);
           w.setWorking(false);
@@ -89,9 +89,9 @@ public class P7 {
   }
   
   
-  boolean nodeWorkedOn(String nodeName, List<Worker> workers) {
+  private boolean nodeWorkedOn(String nodeName, List<Worker> workers) {
     List<String> currentTasks = workers.stream()
-            .filter(p -> p.isWorking() == true)
+            .filter(Worker::isWorking)
             .map(p -> p.getCurrentNode().getName())
             .collect(Collectors.toList());
     
@@ -107,20 +107,18 @@ public class P7 {
       System.out.printf("%s", top.get(0));
       g.removeNode(top.get(0));
     }
-    System.out.printf("\n");
+    System.out.print("\n");
   }
   
   // find top node(s)
   private List<String> findTop(Graph g) {
-    List<String> x = g.getNodes().stream().map(p -> p.getName()).collect(Collectors.toList());
+    List<String> x = g.getNodes().stream().map(Node::getName).collect(Collectors.toList());
     
     for(Node n : g.getNodes()) {
       List<Edge> connections = n.getConnections();
       for(Edge e : connections) {
         String end = e.getEnd().getName();
-        if (x.contains(end)) {
-          x.remove(end);
-        }
+        x.remove(end);
       }
     }
     return x;
@@ -154,7 +152,7 @@ public class P7 {
   
   private List<String[]> readInput() throws IOException {
     return Files.lines(Paths.get(INPUT_PATH))
-            .map(l -> parseLine(l)).collect(Collectors.toList());
+            .map(this::parseLine).collect(Collectors.toList());
   }
   
   private String[] parseLine(String l) {

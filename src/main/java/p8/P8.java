@@ -15,11 +15,11 @@ public class P8 {
   
   public static void main(String[] args) {
     P8 p8 = new P8();
-    p8.solve1();
+    p8.solve();
   }
   
   // solve first part
-  private void solve1() {
+  private void solve() {
     try {
       List<Integer> data = readInputData();
 

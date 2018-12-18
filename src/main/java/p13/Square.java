@@ -48,7 +48,42 @@ public class Square {
     this.connections = connections;
   }
   
-  public void addConnection(Direction d) {
-    this.connections.add(d);
+  // Adding reference to the map array
+  public void addConnections(String c, Square[][] map) {
+    switch(c) {
+      case "|":
+        this.connections.add(Direction.NORTH);
+        this.connections.add(Direction.SOUTH);
+        break;
+      case "-":
+        this.connections.add(Direction.EAST);
+        this.connections.add(Direction.WEST);
+        break;
+      case "/":
+        if(this.x > 0 && map[this.x - 1][this.y].connections.contains(Direction.EAST)) {
+          this.connections.add(Direction.WEST);
+          this.connections.add(Direction.NORTH);
+        } else {
+          this.connections.add(Direction.EAST);
+          this.connections.add(Direction.SOUTH);
+        }
+        break;
+      case "\\":
+        if(this.y > 0 && map[this.x][this.y -1].connections.contains(Direction.SOUTH)){
+          this.connections.add(Direction.EAST);
+          this.connections.add(Direction.NORTH);
+        } else {
+          this.connections.add(Direction.WEST);
+          this.connections.add(Direction.SOUTH);
+        }
+        break;
+      case "+":
+        this.connections.add(Direction.SOUTH);
+        this.connections.add(Direction.NORTH);
+        this.connections.add(Direction.EAST);
+        this.connections.add(Direction.WEST);
+      default:
+        break;
+    }
   }
 }

@@ -4,7 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 enum Direction {
-  NORTH, EAST, SOUTH, WEST;
+  NORTH (0),
+  EAST  (1),
+  SOUTH (2),
+  WEST  (3);
+  
+  private int value;
+  
+  Direction(int i) {
+    this.value = i;
+  }
 }
 
 /**
@@ -52,10 +61,14 @@ public class Square {
   public void addConnections(String c, Square[][] map) {
     switch(c) {
       case "|":
+      case "^":
+      case "v":
         this.connections.add(Direction.NORTH);
         this.connections.add(Direction.SOUTH);
         break;
       case "-":
+      case ">":
+      case "<":
         this.connections.add(Direction.EAST);
         this.connections.add(Direction.WEST);
         break;

@@ -9,6 +9,8 @@ public class Cart {
   private Direction vector;
   private int turnCount;
   private static List<Integer> turnOrder = Arrays.asList(-1, 0, 1);
+  private boolean isDead;
+  
   
   
   public Cart(int x, int y, String s) {
@@ -16,6 +18,7 @@ public class Cart {
     this.y = y;
     this.vector = toVector(s);
     this.turnCount = 0;
+    this.isDead = false;
   }
 
   public Cart(Cart c) {
@@ -24,6 +27,16 @@ public class Cart {
     this.vector = c.vector;
     this.turnCount = c.turnCount;
   }
+  
+  
+  public boolean isDead() {
+    return isDead;
+  }
+  
+  public void setDead(boolean dead) {
+    isDead = dead;
+  }
+  
   
   // it would be nice to actually test it.
   public void turn() {
@@ -60,7 +73,13 @@ public class Cart {
     this.vector = vector;
   }
   
+  public int getTurnCount(){
+    return turnCount;
+  }
   
+  public void setTurnCount(int turnCount) {
+    this.turnCount = turnCount;
+  }
   
   // yes, I know, it's a stupid name.
   private Direction toVector(String s) {

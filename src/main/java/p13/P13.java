@@ -6,11 +6,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class P13 {
   
-  private static final String INPUT_PATH="input13.test1.txt";
+  private static final String INPUT_PATH = "input13.txt";
   private Square[][] map;
   private List<Cart> carts;
   
@@ -24,12 +25,25 @@ public class P13 {
     try {
       carts = new ArrayList<>();
       map = this.readInput();
-    
-      step();
-      step();
-      step();
-      step();
-      step();
+      System.out.printf("initialized %d carts\n", carts.size());
+      
+      var i = 0;
+      // loop while true
+      while(step()) {
+        System.out.println("Iteration: " + i++);
+        carts = carts.stream().filter(p -> !p.isDead()).collect(Collectors.toList());
+        if (carts.size() < 2) {
+          break;
+        }
+      }
+      
+      // var lastCart = this.carts.stream().filter(p -> !p.isDead()).collect(Collectors.toList());
+      
+      // move last car:
+     // Cart c = moveCart(lastCart.get(0));
+      
+      System.out.printf("Last cart location: x: %d, y: %d \n",
+              carts.get(0).getX(), carts.get(0).getY());
       
       System.out.println("done");
     } catch (Exception e) {
@@ -48,7 +62,7 @@ public class P13 {
     int y = 0;
     
     for (String[] line : lines) {
-      for(int x = 0; x < line.length; x++) {
+      for (int x = 0; x < line.length; x++) {
         var s = new Square(x, y);
         s.addConnections(line[x], res);
         res[x][y] = s;
@@ -65,16 +79,59 @@ public class P13 {
   }
   
   /**
-   * single emulation step. Do not modify, carts in place, replace it with a new list.
+   * sadly, there's no elegant way of doing it, carts need to be iterated over
    */
-  private void step() {
-    this.carts = this.carts.stream()
-            .map(this::moveCart).collect(Collectors.toList());
+  private boolean step() {
+    for(Cart c : this.carts) {
+      var tc = moveCart(c);
+      c.setX(tc.getX());
+      c.setY(tc.getY());
+      c.setTurnCount(tc.getTurnCount());
+      c.setVector(tc.getVector());
+      
+      
+      // ugly! - but works.
+      var collided = detectCollision();
+      if (collided.isPresent()) {
+        System.out.printf(
+                "collision detected at x: %d, y: %d\n",
+                collided.get().get(0).getX(), collided.get().get(0).getY());
+        
+        for(Cart cart : collided.get()) {
+          System.out.printf("marking as dead cart at x: %d, y: %d\n", cart.getX(), cart.getY());
+          cart.setDead(true);
+        }
+      }
+      
+    }
+    return true;
   }
   
   
   /**
+   * detect a collision
+   *
+   * @return empty if no collision, cart taking part in collision if any:
+   */
+  private Optional<List<Cart>> detectCollision() {
+    
+    for (Cart c : this.carts) {
+      var collided =
+              this.carts.stream()
+                      .filter(p -> !p.isDead())
+                      .filter(p -> p.getX() == c.getX() && p.getY() == c.getY() )
+                      .collect(Collectors.toList());
+      if (collided.size() > 1) {
+        return Optional.of(collided);
+      }
+    }
+    
+    return Optional.empty();
+  }
+  
+  /**
    * move single cart
+   *
    * @param c cart to be moved
    * @return modified cart
    */
@@ -83,10 +140,11 @@ public class P13 {
     
     var possibleDirections = this.map[m.getX()][m.getY()].getConnections();
     if (possibleDirections.isEmpty()) {
-      // no possible moves? -> not on tracks?, don't move
+      // no possible moves? -> not on tracks?, don't
+      System.out.println("Cart out of tracks?");
       return m;
     }
-  
+    
     // change direction if on crossroads:
     if (possibleDirections.size() == 4) {
       m.turn();

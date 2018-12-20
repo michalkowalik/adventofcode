@@ -37,11 +37,6 @@ public class P13 {
         }
       }
       
-      // var lastCart = this.carts.stream().filter(p -> !p.isDead()).collect(Collectors.toList());
-      
-      // move last car:
-     // Cart c = moveCart(lastCart.get(0));
-      
       System.out.printf("Last cart location: x: %d, y: %d \n",
               carts.get(0).getX(), carts.get(0).getY());
       
@@ -91,7 +86,7 @@ public class P13 {
       
       
       // ugly! - but works.
-      var collided = detectCollision();
+      var collided = detectCollision(c);
       if (collided.isPresent()) {
         System.out.printf(
                 "collision detected at x: %d, y: %d\n",
@@ -113,18 +108,15 @@ public class P13 {
    *
    * @return empty if no collision, cart taking part in collision if any:
    */
-  private Optional<List<Cart>> detectCollision() {
+  private Optional<List<Cart>> detectCollision(Cart c) {
     
-    for (Cart c : this.carts) {
       var collided =
               this.carts.stream()
-                      .filter(p -> !p.isDead())
                       .filter(p -> p.getX() == c.getX() && p.getY() == c.getY() )
                       .collect(Collectors.toList());
       if (collided.size() > 1) {
         return Optional.of(collided);
       }
-    }
     
     return Optional.empty();
   }

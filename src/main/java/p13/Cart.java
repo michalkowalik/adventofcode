@@ -3,7 +3,7 @@ package p13;
 import java.util.Arrays;
 import java.util.List;
 
-public class Cart {
+public class Cart implements Comparable<Cart> {
   private int x;
   private int y;
   private Direction vector;
@@ -93,5 +93,14 @@ public class Cart {
       default:
         return Direction.SOUTH;
     }
+  }
+  
+  @Override
+  public int compareTo(Cart cart) {
+    int res = this.getX() - cart.getX();
+    if (res == 0) {
+      return this.getY() - cart.getY();
+    }
+    return res;
   }
 }

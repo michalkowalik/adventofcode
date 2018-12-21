@@ -27,10 +27,7 @@ public class P13 {
       map = this.readInput();
       System.out.printf("initialized %d carts\n", carts.size());
       
-      var i = 0;
-      // loop while true
       while(step()) {
-        System.out.println("Iteration: " + i++);
         carts = carts.stream().filter(p -> !p.isDead()).collect(Collectors.toList());
         if (carts.size() < 2) {
           break;
@@ -39,8 +36,6 @@ public class P13 {
       
       System.out.printf("Last cart location: x: %d, y: %d \n",
               carts.get(0).getX(), carts.get(0).getY());
-      
-      System.out.println("done");
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -77,13 +72,16 @@ public class P13 {
    * sadly, there's no elegant way of doing it, carts need to be iterated over
    */
   private boolean step() {
+    
+    // sort cart list before looping over:
+    this.carts.sort(Cart::compareTo);
+    
     for(Cart c : this.carts) {
       var tc = moveCart(c);
       c.setX(tc.getX());
       c.setY(tc.getY());
       c.setTurnCount(tc.getTurnCount());
       c.setVector(tc.getVector());
-      
       
       // ugly! - but works.
       var collided = detectCollision(c);
@@ -93,7 +91,6 @@ public class P13 {
                 collided.get().get(0).getX(), collided.get().get(0).getY());
         
         for(Cart cart : collided.get()) {
-          System.out.printf("marking as dead cart at x: %d, y: %d\n", cart.getX(), cart.getY());
           cart.setDead(true);
         }
       }
@@ -117,7 +114,6 @@ public class P13 {
       if (collided.size() > 1) {
         return Optional.of(collided);
       }
-    
     return Optional.empty();
   }
   
@@ -132,8 +128,7 @@ public class P13 {
     
     var possibleDirections = this.map[m.getX()][m.getY()].getConnections();
     if (possibleDirections.isEmpty()) {
-      // no possible moves? -> not on tracks?, don't
-      System.out.println("Cart out of tracks?");
+      System.out.println("Cart out of tracks? Can't move the cart at all.");
       return m;
     }
     
@@ -148,7 +143,7 @@ public class P13 {
       newDirection.ifPresent(m::setVector);
     }
     
-    // move along if possible
+    // move along
     if (possibleDirections.contains(m.getVector())) {
       switch (m.getVector()) {
         case NORTH:
@@ -166,5 +161,4 @@ public class P13 {
     }
     return m;
   }
-  
 }

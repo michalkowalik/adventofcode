@@ -1,19 +1,16 @@
 package p14;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class P14 {
   
   Integer[] scoreBoard;
   
   private static final Integer puzzleInput = 825401;
+  // private static final Integer puzzleInput = 59414;
   private static final Integer inputLen = puzzleInput.toString().length();
   
   public static void main(String[] args) {
     var p14 = new P14();
-    p14.scoreBoard = new Integer[200000000];
+    p14.scoreBoard = new Integer[50000000];
     p14.scoreBoard[0] = 3;
     p14.scoreBoard[1] = 7;
     p14.solve();
@@ -37,8 +34,10 @@ public class P14 {
       second = (second + 1 + scoreBoard[second]) % (current_last + 1);
       
       if (current_last > inputLen) {
-        var z = listToInt(current_last, inputLen);
-        if (z  == puzzleInput) {
+        var z1 = listToInt(current_last, inputLen);
+        var z2 = listToInt(current_last - 1, inputLen);
+        if (z1  == puzzleInput || z2 == puzzleInput) {
+          System.out.println("HERE!");
           break;
         }
       }
@@ -46,6 +45,7 @@ public class P14 {
    
     var x = listToInt(current_last, 10);
     System.out.printf("Fist part: %s\n",x);
+    System.out.printf("Current last: %d\n", current_last);
   }
   
   private int listToInt(int cursor, int length) {
